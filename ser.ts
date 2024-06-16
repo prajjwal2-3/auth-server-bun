@@ -1,8 +1,10 @@
-const password = "ye crack nahi ho paega";
+import jwt from 'jsonwebtoken';
+import { jwt_secrets } from '@/config';
 
-const hash = await Bun.password.hash(password, {
-    algorithm: "bcrypt",
-    cost: 4, // number between 4-31
-  });
+const generateAccessToken = (email: string) => {
+    const payload = { email }; // Wrap the email in an object
+    const jwts = jwt.sign(payload, jwt_secrets.email_verification.secret, { expiresIn: '2d' });
+    console.log(jwts);
+};
 
-console.log(hash.toString())
+generateAccessToken('helloworld');

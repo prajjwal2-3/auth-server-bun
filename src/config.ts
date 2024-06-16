@@ -71,6 +71,15 @@ export const transporter = nodemailer.createTransport({
   </html>
   `,
   };
+  export const cookie = {
+    ACCESS_TOKEN: "access_token",
+    REFRESH_TOKEN: "refresh_token",
+    OPTIONS: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Set secure flag in production
+        sameSite: 'strict',
+    }
+}
 
   export const jwt_secrets = {
     email_verification: {

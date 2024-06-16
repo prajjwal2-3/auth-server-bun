@@ -1,7 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import hpp from "hpp";
-
+import cookieParser from 'cookie-parser'
 import AUTH_ROUTE from "@/routes/authRoute";
 const app = express();
 const PORT = Bun.env.PORT;
@@ -9,7 +9,7 @@ app.use(helmet());
 app.use(hpp());
 
 app.use(express.json());
-
+app.use(cookieParser())
 app.use("/auth", AUTH_ROUTE);
 
 app.listen(PORT, () => {
