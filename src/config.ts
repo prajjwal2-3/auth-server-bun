@@ -71,3 +71,23 @@ export const transporter = nodemailer.createTransport({
   </html>
   `,
   };
+
+  export const jwt_secrets = {
+    email_verification: {
+        secret: Bun.env.TOKEN_SECRET || "",
+        expiry: Number(Bun.env.VERIFICATION_JWT_EXPIRES_IN_MINS || "")
+    },
+    forgot_pass: {
+        secret: Bun.env.FORGOT_PASSWORD_JWT_SECRET || "",
+        expiry: Number(Bun.env.FORGOT_PASSWORD_JWT_EXPIRES_IN_MINS || "")
+    },
+    access_token: {
+        secret: Bun.env.AUTH_ACCESS_JWT_SECRET || "",
+        expiry: Number(Bun.env.AUTH_ACCESS_JWT_EXPIRES_IN_MINS || "")
+    },
+    refresh_token: {
+        secret: Bun.env.AUTH_REFRESH_JWT_SECRET || "",
+        expiry: Number(Bun.env.AUTH_REFRESH_JWT_EXPIRES_IN_MINS || "")
+    },
+
+}

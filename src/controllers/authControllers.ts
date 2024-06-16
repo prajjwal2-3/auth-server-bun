@@ -31,17 +31,18 @@ export const signUp = async (req:any,res:any)=>{
         const errors = validation.error.errors.map(err => err.message);
         return res.status(400).json({ errors });
     }
-
+    const verificationOTP = Math.floor(100000 + Math.random() * 900000)
     try{
         const newUser = await prisma.user.create({
             data:{
                 email,
                 name,
                 password,
+                verification_otp:verificationOTP
              
             }
         })
-        const verificationOTP = Math.floor(100000 + Math.random() * 900000)
+        
     }catch(error){
         console.error(error);
         return res.status(500).json({ error: "Internal server error" });
