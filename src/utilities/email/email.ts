@@ -85,3 +85,8 @@ const sendMail = async (
 };
 
 sendMail(mailOptions, transporter);
+
+
+export const sendVerificationOTP = ()=>{
+  
+}

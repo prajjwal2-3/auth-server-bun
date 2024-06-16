@@ -3,6 +3,7 @@ import { z } from "zod";
 const prisma = new PrismaClient();
 import { cookie } from "@/config";
 import { generateAccessToken } from "@/utilities/jwt/jwt";
+import { sendVerificationEmail } from "@/utilities/email/emailFunction";
 import {
   name_validator,
   email_validator,
@@ -30,15 +31,17 @@ const forgot_password_validation = z.object({
 
 export const signUp = async (req: any, res: any) => {
   const { name, email, password } = req.body;
-
+const testmail = 'prajjwalbh25@gmail.com'
   const validation = sign_up_validation.safeParse({ name, email, password });
   if (!validation.success) {
     const errors = validation.error.errors.map((err) => err.message);
     return res.status(400).json({ errors });
   }
   const verificationOTP = Math.floor(100000 + Math.random() * 900000);
+  sendVerificationEmail(verificationOTP,testmail)
   try {
     const acessToken = generateAccessToken(email);
+    console.log(acessToken)
     if(!acessToken) return res.status(500).json({message:'error generating access token, user registration failed.'})
     const newUser = await prisma.user.create({
       data: {
@@ -66,3 +69,6 @@ export const signUp = async (req: any, res: any) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+export const verifyRegistrationOtp = (req:any,res:any)=>{
+  const {otp}=req.body
+}
