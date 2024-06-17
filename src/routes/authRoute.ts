@@ -1,10 +1,11 @@
 import express from 'express'
-import { signInUsingPassword, signUp, verifyRegistrationOtp } from '@/controllers/authControllers'
+import { signInUsingOTP, signInUsingPassword, signUp, verifyRegistrationOtp } from '@/controllers/authControllers'
 import { verifyRequest } from '@/middlewares/verifyRequest'
 const route = express.Router()
 
 route.post('/signup',signUp)
 route.post('/verifySignUpOtp',verifyRequest,verifyRegistrationOtp)
-route.post('/signin',signInUsingPassword)
+route.post('/signIn',signInUsingPassword)
+route.post('/generateSignInOTP',signInUsingOTP)
 
 export default route

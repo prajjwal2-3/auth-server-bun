@@ -7,6 +7,7 @@ import { generateJwtToken } from "@/utilities/jwt/jwt";
 import {
   sendVerificationEmail,
   verifiedEmail,
+  sendSignInOTP
 } from "@/utilities/email/emailFunction";
 import {
   name_validator,
@@ -182,3 +183,34 @@ export const signInUsingPassword = async (req: any, res: any) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+export const generateSignInOTP = async(req:any,res:any)=>{
+      const {email}=req.body
+
+      try{
+        const OTP =  Math.floor(100000 + Math.random() * 900000)
+        const user = await prisma.user.update({
+          where:{
+            email:email
+          },data:{
+            verification_otp:OTP
+          }
+        })
+       sendSignInOTP(OTP,email,user.name)
+       return res.status(200).json({message:'OTP generated successfully and sent over mail.'})
+
+
+      }catch(error){
+        console.log(error)
+        return res.status(500).json({message:'Error generating OTP, Try Signing In using Password.'})
+      }
+
+
+}
+
+export const signInUsingOTP = async(req:any,res:any)=>{
+        const {otp,email}=req.body
+
+        try{
+          const user = await
+        }
+}
