@@ -7,7 +7,7 @@ import { generateJwtToken } from "@/utilities/jwt/jwt";
 import {
   sendVerificationEmail,
   verifiedEmail,
-  sendSignInOTP
+  sendSignInOTP,
 } from "@/utilities/email/emailFunction";
 import {
   name_validator,
@@ -21,7 +21,9 @@ const sign_up_validation = z.object({
   email: email_validator,
   password: password_validator,
 });
-
+const sign_in_with_otp_validation = z.object({
+  email: email_validator,
+});
 const sign_in_validation = z.object({
   email: email_validator,
   password: password_validator,
@@ -183,34 +185,75 @@ export const signInUsingPassword = async (req: any, res: any) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-export const generateSignInOTP = async(req:any,res:any)=>{
-      const {email}=req.body
+export const generateSignInOTP = async (req: any, res: any) => {
+  const { email } = req.body;
 
-      try{
-        const OTP =  Math.floor(100000 + Math.random() * 900000)
-        const user = await prisma.user.update({
-          where:{
-            email:email
-          },data:{
-            verification_otp:OTP
-          }
-        })
-       sendSignInOTP(OTP,email,user.name)
-       return res.status(200).json({message:'OTP generated successfully and sent over mail.'})
+  try {
+    const OTP = Math.floor(100000 + Math.random() * 900000);
+    const user = await prisma.user.update({
+      where: {
+        email: email,
+      },
+      data: {
+        verification_otp: OTP,
+      },
+    });
+    sendSignInOTP(OTP, email, user.name);
+    return res
+      .status(200)
+      .json({ message: "OTP generated successfully and sent over mail." });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({
+        message: "Error generating OTP, Try Signing In using Password.",
+      });
+  }
+};
 
+export const signInUsingOTP = async (req: any, res: any) => {
+  const { otp, email } = req.body;
+  const validation = sign_in_with_otp_validation.safeParse({ email });
+  if (!validation.success) {
+    const errors = validation.error.errors.map((err) => err.message);
+    return res.status(400).json({ errors });
+  }
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+    if (!existingUser)
+      return res.status(403).json({ message: "Invalid email" });
+    if (otp == !existingUser.verification_otp)
+      return res.status(403).json({ message: "Invalid OTP" });
+    const log = await prisma.logs.create({
+      data: {
+        userId: existingUser.id,
+        statement: `user ${existingUser.name} was logged in successfully by OTP authentication`,
+      },
+    });
 
-      }catch(error){
-        console.log(error)
-        return res.status(500).json({message:'Error generating OTP, Try Signing In using Password.'})
-      }
+    const acessToken = generateJwtToken(
+      email,
+      jwt_secrets.access_token.secret,
+      jwt_secrets.access_token.expiry
+    );
+    const refreshToken = generateJwtToken(
+      email,
+      jwt_secrets.refresh_token.secret,
+      jwt_secrets.refresh_token.expiry
+    );
 
-
-}
-
-export const signInUsingOTP = async(req:any,res:any)=>{
-        const {otp,email}=req.body
-
-        try{
-          const user = await
-        }
-}
+    return res
+      .status(200)
+      .cookie(cookie.ACCESS_TOKEN, acessToken, cookie.OPTIONS)
+      .cookie(cookie.REFRESH_TOKEN, refreshToken, cookie.OPTIONS)
+      .json({ message: "User Signed in successfully" });
+  } catch (error) {
+    console.error(`Controller:Auth:Error in [Login a User] : ${error}`);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
