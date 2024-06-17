@@ -4,7 +4,10 @@ const prisma = new PrismaClient();
 
 import { cookie, jwt_secrets } from "@/config";
 import { generateJwtToken } from "@/utilities/jwt/jwt";
-import { sendVerificationEmail,verifiedEmail } from "@/utilities/email/emailFunction";
+import {
+  sendVerificationEmail,
+  verifiedEmail,
+} from "@/utilities/email/emailFunction";
 import {
   name_validator,
   email_validator,
@@ -52,19 +55,17 @@ export const signUp = async (req: any, res: any) => {
       jwt_secrets.refresh_token.expiry
     );
     console.log(acessToken);
-    console.log(refreshToken)
+    console.log(refreshToken);
     if (!acessToken)
-      return res
-        .status(500)
-        .json({
-          message: "error generating access token, user registration failed.",
-        });
-      const hashedPassword = await Bun.password.hash(password)
+      return res.status(500).json({
+        message: "error generating access token, user registration failed.",
+      });
+    const hashedPassword = await Bun.password.hash(password);
     const newUser = await prisma.user.create({
       data: {
         email,
         name,
-        password:hashedPassword,
+        password: hashedPassword,
         verification_otp: verificationOTP,
       },
     });
@@ -90,9 +91,9 @@ export const signUp = async (req: any, res: any) => {
 };
 export const verifyRegistrationOtp = async (req: any, res: any) => {
   try {
-    const { otp} = req.headers;
+    const { otp } = req.headers;
     const userEmail = req.user;
-console.log(userEmail)
+    console.log(userEmail);
     if (!userEmail) {
       return res
         .status(401)
@@ -122,7 +123,7 @@ console.log(userEmail)
           statement: `user ${verifiedUer.name} verified successfully by OTP.`,
         },
       });
-      verifiedEmail(verifiedUer.name,verifiedUer.email)
+      verifiedEmail(verifiedUer.name, verifiedUer.email);
       return res.status(200).json({ message: "User verified successfully" });
     } else {
       return res.status(401).json({ message: "Invalid OTP" });
@@ -130,5 +131,54 @@ console.log(userEmail)
   } catch (error) {
     console.log("error verifying otp");
     return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const signInUsingPassword = async (req: any, res: any) => {
+  const { email, password } = req.body;
+
+  const validation = sign_in_validation.safeParse({ email, password });
+  if (!validation.success) {
+    const errors = validation.error.errors.map((err) => err.message);
+    return res.status(400).json({ errors });
+  }
+
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!existingUser)
+      return res.status(403).json({ message: "Invalid email" });
+    const isMatch = await Bun.password.verify(password, existingUser.password);
+    if (!isMatch) return res.status(403).json({ message: "Invalid password" });
+    const log = await prisma.logs.create({
+      data: {
+        userId: existingUser.id,
+        statement: `user ${existingUser.name} was logged in successfully by password authentication`,
+      },
+    });
+
+    const acessToken = generateJwtToken(
+      email,
+      jwt_secrets.access_token.secret,
+      jwt_secrets.access_token.expiry
+    );
+    const refreshToken = generateJwtToken(
+      email,
+      jwt_secrets.refresh_token.secret,
+      jwt_secrets.refresh_token.expiry
+    );
+
+    return res
+      .status(200)
+      .cookie(cookie.ACCESS_TOKEN, acessToken, cookie.OPTIONS)
+      .cookie(cookie.REFRESH_TOKEN, refreshToken, cookie.OPTIONS)
+      .json({ message: "User Signed in successfully" });
+  } catch (error: any) {
+    console.error(`Controller:Auth:Error in [Login a User] : ${error.message}`);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
