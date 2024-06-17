@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 const prisma = new PrismaClient();
-import { cookie } from "@/config";
-import { generateAccessToken } from "@/utilities/jwt/jwt";
+import { cookie, jwt_secrets } from "@/config";
+import { generateJwtToken } from "@/utilities/jwt/jwt";
 import { sendVerificationEmail } from "@/utilities/email/emailFunction";
 import {
   name_validator,
@@ -31,18 +31,33 @@ const forgot_password_validation = z.object({
 
 export const signUp = async (req: any, res: any) => {
   const { name, email, password } = req.body;
-const testmail = 'prajjwalbh25@gmail.com'
+  const testmail = "prajjwalbh25@gmail.com";
   const validation = sign_up_validation.safeParse({ name, email, password });
   if (!validation.success) {
     const errors = validation.error.errors.map((err) => err.message);
     return res.status(400).json({ errors });
   }
   const verificationOTP = Math.floor(100000 + Math.random() * 900000);
-  sendVerificationEmail(verificationOTP,testmail)
+  sendVerificationEmail(verificationOTP, email);
   try {
-    const acessToken = generateAccessToken(email);
-    console.log(acessToken)
-    if(!acessToken) return res.status(500).json({message:'error generating access token, user registration failed.'})
+    const acessToken = generateJwtToken(
+      email,
+      jwt_secrets.access_token.secret,
+      jwt_secrets.access_token.expiry
+    );
+    const refreshToken = generateJwtToken(
+      email,
+      jwt_secrets.refresh_token.secret,
+      jwt_secrets.refresh_token.expiry
+    );
+    console.log(acessToken);
+    console.log(refreshToken)
+    if (!acessToken)
+      return res
+        .status(500)
+        .json({
+          message: "error generating access token, user registration failed.",
+        });
     const newUser = await prisma.user.create({
       data: {
         email,
@@ -51,24 +66,66 @@ const testmail = 'prajjwalbh25@gmail.com'
         verification_otp: verificationOTP,
       },
     });
-    if(!newUser) return res.status(500).json({message:'error creating a new user'})
-   const userId = newUser.id
-     const log = await prisma.logs.create({
-        data:{
-            userId,
-            statement:`user ${newUser.name} was registered successfully`
-        }
-     })
+    if (!newUser)
+      return res.status(500).json({ message: "error creating a new user" });
+    const userId = newUser.id;
+    const log = await prisma.logs.create({
+      data: {
+        userId,
+        statement: `user ${newUser.name} was registered successfully`,
+      },
+    });
 
     return res
       .status(200)
       .cookie(cookie.ACCESS_TOKEN, acessToken, cookie.OPTIONS)
-      .json({ message: "User Registered Successfully",access:acessToken });
+      .cookie(cookie.REFRESH_TOKEN, refreshToken, cookie.OPTIONS)
+      .json({ message: "User Registered Successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
-export const verifyRegistrationOtp = (req:any,res:any)=>{
-  const {otp}=req.body
-}
+export const verifyRegistrationOtp = async (req: any, res: any) => {
+  try {
+    const { otp} = req.headers;
+    const userEmail = req.user;
+console.log(userEmail)
+    if (!userEmail) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: User not authenticated" });
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        email: userEmail,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (otp === user?.verification_otp.toString()) {
+      const verifiedUer = await prisma.user.update({
+        where: {
+          email: userEmail,
+        },
+        data: {
+          is_verified: true,
+        },
+      });
+      const log = await prisma.logs.create({
+        data: {
+          userId: verifiedUer.id,
+          statement: `user ${verifiedUer.name} verified successfully by OTP.`,
+        },
+      });
+      return res.status(200).json({ message: "User verified successfully" });
+    } else {
+      return res.status(401).json({ message: "Invalid OTP" });
+    }
+  } catch (error) {
+    console.log("error verifying otp");
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

@@ -1,8 +1,17 @@
 import jwt from 'jsonwebtoken'
-import { jwt_secrets } from '@/config'
 
-export const generateAccessToken = (email: string )=>{
+
+export const generateJwtToken = (email: string,secret_key:string,expirationtime:number )=>{
     const payload = { email }; 
-    const jwts = jwt.sign(payload,jwt_secrets.email_verification.secret,{expiresIn:'172800s'})
+    const jwts = jwt.sign(payload,secret_key,{expiresIn:Math.floor((Date.now() + expirationtime * 60000) / 1000)})
     return jwts
+}
+
+export const verifyJwtToken = (token:string,secret_key:string)=>{
+    try{
+        const decoded= jwt.verify(token,secret_key)
+        return {success:true,data:decoded}
+    }catch(error){
+        return error;
+    }
 }
