@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 const prisma = new PrismaClient();
+
 import { cookie, jwt_secrets } from "@/config";
 import { generateJwtToken } from "@/utilities/jwt/jwt";
 import { sendVerificationEmail,verifiedEmail } from "@/utilities/email/emailFunction";
@@ -58,11 +59,12 @@ export const signUp = async (req: any, res: any) => {
         .json({
           message: "error generating access token, user registration failed.",
         });
+      const hashedPassword = await Bun.password.hash(password)
     const newUser = await prisma.user.create({
       data: {
         email,
         name,
-        password,
+        password:hashedPassword,
         verification_otp: verificationOTP,
       },
     });
