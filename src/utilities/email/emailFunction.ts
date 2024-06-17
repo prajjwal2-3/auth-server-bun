@@ -115,3 +115,110 @@ export const sendVerificationEmail = (otp: Number, userEmail: string) => {
 
   sendMail(mailOptions, transporter);
 };
+
+export const verifiedEmail = (user:string,userEmail:string)=>{
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.google.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: Bun.env.MAIL_HOST,
+      pass: Bun.env.MAIL_PASSWORD,
+    },
+  });
+
+  let mailOptions = {
+    from: {
+      name: "Easevent",
+      address: Bun.env.MAIL_HOST,
+    },
+    to: userEmail,
+    subject: "Welcome to Easevent!!!",
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Confirmed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+        }
+        .content {
+            padding: 20px;
+            text-align: left;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            color: #777;
+            font-size: 12px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px 0;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>OTP Confirmed</h1>
+        </div>
+        <div class="content">
+            <p>Dear ${user},</p>
+            <p>Your OTP has been successfully confirmed. You can now host events securely with Easevent.</p>
+            <p>If you did not request this OTP or if you have any concerns, please contact our support team immediately.</p>
+            <a href="[Support Link]" class="button">Contact Support</a>
+            <p>Thank you for using our service!</p>
+            <p>Best regards,<br>Easevent Team</p>
+        </div>
+        <div class="footer">
+            <p> @2024 Easevent. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+
+`,
+  };
+  const sendMail = async (
+    mailOptions: any,
+    transporter: { sendMail: (arg0: any) => any }
+  ) => {
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log("Email has been sent🚀");
+     
+    } catch (error) {
+      console.log(error);
+      
+    }
+  };
+
+  sendMail(mailOptions, transporter);
+}

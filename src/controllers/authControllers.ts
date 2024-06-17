@@ -3,7 +3,7 @@ import { z } from "zod";
 const prisma = new PrismaClient();
 import { cookie, jwt_secrets } from "@/config";
 import { generateJwtToken } from "@/utilities/jwt/jwt";
-import { sendVerificationEmail } from "@/utilities/email/emailFunction";
+import { sendVerificationEmail,verifiedEmail } from "@/utilities/email/emailFunction";
 import {
   name_validator,
   email_validator,
@@ -120,6 +120,7 @@ console.log(userEmail)
           statement: `user ${verifiedUer.name} verified successfully by OTP.`,
         },
       });
+      verifiedEmail(verifiedUer.name,verifiedUer.email)
       return res.status(200).json({ message: "User verified successfully" });
     } else {
       return res.status(401).json({ message: "Invalid OTP" });
