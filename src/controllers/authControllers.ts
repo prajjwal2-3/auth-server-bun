@@ -257,3 +257,28 @@ export const signInUsingOTP = async (req: any, res: any) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const signOut = async (req: any, res: any) => {
+  try {
+    
+    res.clearCookie(cookie.ACCESS_TOKEN);
+    res.clearCookie(cookie.REFRESH_TOKEN);
+
+
+    const userId = req.userId
+    if (userId) {
+      await prisma.logs.create({
+        data: {
+          userId,
+          statement: `User with ID ${userId} signed out successfully.`,
+        },
+      });
+    }
+
+    return res.status(200).json({ message: "User signed out successfully" });
+  } catch (error) {
+    console.error(`Controller:Auth:Error in [Sign Out] : ${error}`);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+

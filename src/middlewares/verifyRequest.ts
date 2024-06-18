@@ -26,7 +26,13 @@ export const verifyRequest = async (req: any, res: any, next: any) => {
         jwt_secrets.access_token.secret
       )) as DecodedJwtPayload;
       console.log(token)
+      const user = await prisma.user.findUnique({
+        where:{
+          email:token.data.email
+        }
+      })
       req.user = token.data.email;
+      req.userId = user?.id
       next();
     } catch (error: any) {
       if (error.name === "TokenExpiredError") {
