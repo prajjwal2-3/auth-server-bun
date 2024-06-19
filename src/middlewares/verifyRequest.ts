@@ -13,8 +13,14 @@ export const verifyRequest = async (req: any, res: any, next: any) => {
   try {
     console.log(req.headers)
     
-    const acessToken = req.headers.acesstoken
-    const refreshToken = req.headers.refreshtoken
+    const cookies = req.headers.cookie.split("; ").reduce((acc: { [x: string]: any; }, cookie: { split: (arg0: string) => [any, any]; }) => {
+      const [name, value] = cookie.split("=");
+      acc[name] = value;
+      return acc;
+    }, {});
+    
+    const acessToken = cookies.access_token;
+    const refreshToken = cookies.refresh_token;
     console.log(acessToken)
     console.log(refreshToken)
     if (!acessToken || !refreshToken) {

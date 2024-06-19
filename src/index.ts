@@ -1,9 +1,16 @@
 import express from "express";
 import helmet from "helmet";
 import hpp from "hpp";
+import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import AUTH_ROUTE from "@/routes/authRoute";
 const app = express();
+const corsOptions = {
+  origin: 'http://localhost:3000', // specify your client's origin
+  credentials: true // allows the server to accept cookies from the client
+};
+
+app.use(cors(corsOptions));
 const PORT = Bun.env.PORT;
 app.use(helmet());
 app.use(hpp());
