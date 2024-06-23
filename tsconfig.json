@@ -19,7 +19,7 @@
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./api/*"],
     },
 
     // Some stricter flags (disabled by default)
