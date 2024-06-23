@@ -3,7 +3,7 @@
   { "source": "/(.*)", "destination": "/src" }
      ],
      "functions":{
-      "src/**/*.js":{
+      "src/**/*.ts":{
         "maxDuration":60
       }
      }
