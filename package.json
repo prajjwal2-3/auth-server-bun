@@ -27,6 +27,6 @@
     "zod": "^3.23.8"
   },
   "prisma": {
-    "schema": "./src/db/prisma/schema.prisma"
+    "schema": "./api/db/prisma/schema.prisma"
   }
 }
