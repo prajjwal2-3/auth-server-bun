@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
-import { cookie, jwt_secrets } from "../config.ts";
-import { generateJwtToken, verifyJwtToken } from "../utilities/jwt/jwt.ts";
+import { cookie, jwt_secrets } from "../config";
+import { generateJwtToken, verifyJwtToken } from "../utilities/jwt/jwt";
 const prisma = new PrismaClient();
 
 export const verifyRequest = async (req: any, res: any, next: any) => {

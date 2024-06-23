@@ -1,6 +1,6 @@
 import express from 'express'
-import { generateSignInOTP, signInUsingOTP, signInUsingPassword, signOut, signUp, verifyRegistrationOtp } from '../controllers/authControllers.ts'
-import { verifyRequest } from '../middlewares/verifyRequest.ts'
+import { generateSignInOTP, signInUsingOTP, signInUsingPassword, signOut, signUp, verifyRegistrationOtp } from '../controllers/authControllers'
+import { verifyRequest } from '../middlewares/verifyRequest'
 const route = express.Router()
 
 route.post('/signup',signUp)
