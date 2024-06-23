@@ -3,7 +3,7 @@ import helmet from "helmet";
 import hpp from "hpp";
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import AUTH_ROUTE from "@/routes/authRoute";
+import AUTH_ROUTE from "./routes/authRoute";
 const app = express();
 const corsOptions = {
   origin: 'http://localhost:3100', // specify your client's origin
