@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser'
 import AUTH_ROUTE from "@/routes/authRoute";
 const app = express();
 const corsOptions = {
-  origin: 'http://localhost:3000', // specify your client's origin
+  origin: 'http://localhost:3100', // specify your client's origin
   credentials: true // allows the server to accept cookies from the client
 };
 

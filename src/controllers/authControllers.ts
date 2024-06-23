@@ -45,6 +45,7 @@ export const signUp = async (req: any, res: any) => {
     return res.status(400).json({ errors });
   }
   const verificationOTP = Math.floor(100000 + Math.random() * 900000);
+  console.log(verificationOTP)
   sendVerificationEmail(verificationOTP, email);
   try {
     const acessToken = generateJwtToken(
