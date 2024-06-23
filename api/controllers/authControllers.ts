@@ -2,19 +2,19 @@ import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 const prisma = new PrismaClient();
 
-import { cookie, jwt_secrets } from "../config";
-import { generateJwtToken } from "../utilities/jwt/jwt";
+import { cookie, jwt_secrets } from "../config.ts";
+import { generateJwtToken } from "../utilities/jwt/jwt.ts";
 import {
   sendVerificationEmail,
   verifiedEmail,
   sendSignInOTP,
-} from "../utilities/email/emailFunction";
+} from "../utilities/email/emailFunction.ts";
 import {
   name_validator,
   email_validator,
   password_validator,
   token_validator,
-} from "../validations/validate";
+} from "../validations/validate.ts";
 
 const sign_up_validation = z.object({
   name: name_validator,
