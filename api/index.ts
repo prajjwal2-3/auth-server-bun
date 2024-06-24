@@ -23,10 +23,10 @@ app.use(express.json());
 app.use(cookieParser())
 app.use("/auth", AUTH_ROUTE);
 
-app.post("/testuser",(req:any,res:any)=>{
+app.post("/testuser",async (req:any,res:any)=>{
   const {name,email,phone_number,password}=req.body
  try{
-  const newUser = prisma.testUser.create({
+  const newUser =await prisma.testUser.create({
     data:{
       email,
       name,
@@ -34,8 +34,9 @@ app.post("/testuser",(req:any,res:any)=>{
       phone_number
     }
   })
+  console.log(newUser)
   sendNormalEmail(email,name)
-  res.status(200).json({message:'user created successfully'})
+  res.status(200).json({message:'user created successfully',user:newUser})
  }catch(error){
   console.log(error)
   res.status(500).json({message:'something went wrong'})
