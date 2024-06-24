@@ -10,7 +10,8 @@ import { sendNormalEmail } from "./utilities/email/emailFunction";
 const prisma = new PrismaClient();
 const app = express();
 const corsOptions = {
-  origin: 'http://localhost:3100', // specify your client's origin
+  
+  origin: 'https://easevent.vercel.app/', // specify your client's origin
   credentials: true // allows the server to accept cookies from the client
 };
 
