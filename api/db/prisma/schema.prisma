@@ -33,3 +33,11 @@ model Logs {
   createdAt DateTime @default(now())
   statement String
 }
+
+model testUser {
+  id           Int    @id @unique @default(autoincrement())
+  name         String
+  email        String @unique
+  phone_number Int    @unique
+  password     String
+}

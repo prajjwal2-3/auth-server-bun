@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-
+import { normal } from "./emailTemplate";
 export const sendVerificationEmail = (otp: Number, userEmail: string) => {
   let transporter = nodemailer.createTransport({
     service: "gmail",
@@ -321,6 +321,43 @@ export const sendSignInOTP = (otp: Number, userEmail: string,name:string) => {
 </body>
 </html>
 `,
+  };
+  const sendMail = async (
+    mailOptions: any,
+    transporter: { sendMail: (arg0: any) => any }
+  ) => {
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log("Email has been sent🚀");
+     
+    } catch (error) {
+      console.log(error);
+      
+    }
+  };
+
+  sendMail(mailOptions, transporter);
+};
+export const sendNormalEmail = ( userEmail: string,name:string) => {
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.google.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: Bun.env.MAIL_HOST,
+      pass: Bun.env.MAIL_PASSWORD,
+    },
+  });
+
+  let mailOptions = {
+    from: {
+      name: "Social Yield Capital",
+      address: Bun.env.MAIL_HOST,
+    },
+    to: userEmail,
+    subject: `Welcome ${name}`,
+    html:normal,
   };
   const sendMail = async (
     mailOptions: any,
