@@ -77,8 +77,9 @@ export const transporter = nodemailer.createTransport({
     OPTIONS: {
         httpOnly: true,
         secure: true, // Set secure flag in production
-        sameSite: 'none',
-        path:'/'
+       
+        path:'/',
+
     }
 }
 
