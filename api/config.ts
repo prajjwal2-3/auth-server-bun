@@ -76,8 +76,9 @@ export const transporter = nodemailer.createTransport({
     REFRESH_TOKEN: "refresh_token",
     OPTIONS: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Set secure flag in production
-        sameSite: 'strict',
+        secure: true, // Set secure flag in production
+        sameSite: 'none',
+        path:'/'
     }
 }
 
