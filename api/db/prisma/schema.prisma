@@ -38,6 +38,6 @@ model testUser {
   id           Int    @id @unique @default(autoincrement())
   name         String
   email        String @unique
-  phone_number Int    @unique
+  phone_number String    @unique 
   password     String
 }
