@@ -95,7 +95,8 @@ export const signUp = async (req: any, res: any) => {
 };
 export const verifyRegistrationOtp = async (req: any, res: any) => {
   try {
-    const { otp } = req.headers;
+    const { otp } = req.body;
+    console.log(otp)
     const userEmail = req.user;
     console.log(userEmail);
     if (!userEmail) {

@@ -71,14 +71,17 @@ export const transporter = nodemailer.createTransport({
   </html>
   `,
   };
+
+  const isproduction = process.env.NODE_ENV==='production'
   export const cookie = {
     ACCESS_TOKEN: "access_token",
     REFRESH_TOKEN: "refresh_token",
     OPTIONS: {
         httpOnly: true,
-        secure: true, // Set secure flag in production
+        secure: isproduction,
+        path:'/' // Set secure flag in production
        
-        path:'/',
+       
 
     }
 }
