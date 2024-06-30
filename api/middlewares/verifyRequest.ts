@@ -19,8 +19,8 @@ export const verifyRequest = async (req: any, res: any, next: any) => {
       return acc;
     }, {});
     
-    const acessToken = cookies.access_token;
-    const refreshToken = cookies.refresh_token;
+    const acessToken = cookies.access_token_from_s;
+    const refreshToken = cookies.refresh_token_from_s;
     console.log(acessToken)
     console.log(refreshToken)
     if (!acessToken || !refreshToken) {
