@@ -78,7 +78,8 @@ export const transporter = nodemailer.createTransport({
     REFRESH_TOKEN: "refresh_token_from_s",
     OPTIONS: {
       httpOnly: true,
-      secure: isproduction, // Set to true in production if using HTTPS
+      sameSite: 'none',
+      secure: true, // Set to true in production if using HTTPS
       path: '/', // Root path of the domain
       maxAge: 7*24 * 60 * 60 * 1000, // Cookie expiry time in milliseconds (7 day)
        
