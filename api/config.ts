@@ -77,11 +77,7 @@ export const transporter = nodemailer.createTransport({
     ACCESS_TOKEN: "access_token_from_s",
     REFRESH_TOKEN: "refresh_token_from_s",
     OPTIONS: {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true, 
      
-      maxAge: 7*24 * 60 * 60 * 1000, // Cookie expiry time in milliseconds (7 day)
        
 
     }
