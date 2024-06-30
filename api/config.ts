@@ -77,7 +77,10 @@ export const transporter = nodemailer.createTransport({
     ACCESS_TOKEN: "access_token_from_s",
     REFRESH_TOKEN: "refresh_token_from_s",
     OPTIONS: {
-     
+      httpOnly: true,
+       sameSite: 'none',
+        secure: isproduction,
+        maxAge:7*24*30*3600000
        
 
     }
