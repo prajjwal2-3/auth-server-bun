@@ -79,8 +79,8 @@ export const transporter = nodemailer.createTransport({
     OPTIONS: {
         httpOnly: true,
         secure: isproduction,
-        path:'/' // Set secure flag in production
-       
+        path:'/', // Set secure flag in production
+        maxAge: 7 * 24 * 60 * 60 * 1000
        
 
     }
