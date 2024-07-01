@@ -81,7 +81,7 @@ export const transporter = nodemailer.createTransport({
        sameSite: 'none',
         secure: true,
         maxAge:7*24*30*3600000,
-        domain:'social-yield-capital.vercel.app'
+        
        
 
     }
