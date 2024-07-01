@@ -11,6 +11,6 @@ route.post('/generateSignInOTP',generateSignInOTP)
 route.post('/signInWithOTP',signInUsingOTP)
 route.post('/signOut',verifyRequest,signOut)
 route.get('/uthjaBKL',uthjaBKL)
-route.post('/isAuthenticated',isAuthenticated)
+route.post('/isAuthenticated',verifyRequest,isAuthenticated)
 
 export default route
