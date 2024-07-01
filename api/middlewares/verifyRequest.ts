@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import jwt from "jsonwebtoken";
 import { cookie, jwt_secrets } from "../config";
 import { generateJwtToken, verifyJwtToken } from "../utilities/jwt/jwt";
 const prisma = new PrismaClient();
@@ -11,16 +10,13 @@ export const verifyRequest = async (req: any, res: any, next: any) => {
    }
   }
   try {
-    console.log(req.headers)
     
-    const cookies = req.headers.cookie.split("; ").reduce((acc: { [x: string]: any; }, cookie: { split: (arg0: string) => [any, any]; }) => {
-      const [name, value] = cookie.split("=");
-      acc[name] = value;
-      return acc;
-    }, {});
+    console.log(req.cookies)
     
-    const acessToken = cookies.access_token_from_s;
-    const refreshToken = cookies.refresh_token_from_s;
+   
+    
+    const acessToken = req.cookies.access_token_from_s;
+    const refreshToken = req.cookies.refresh_token_from_s;
     console.log(acessToken)
     console.log(refreshToken)
     if (!acessToken || !refreshToken) {
