@@ -82,6 +82,7 @@ export const transporter = nodemailer.createTransport({
        sameSite: 'none',
         secure: true,
         maxAge:sevenMonthsInMilliseconds,
+        domain:'.onrender.com',
         
        
 
