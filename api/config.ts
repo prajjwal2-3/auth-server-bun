@@ -79,8 +79,9 @@ export const transporter = nodemailer.createTransport({
     OPTIONS: {
       httpOnly: true,
        sameSite: 'none',
-        secure: isproduction,
-        maxAge:7*24*30*3600000
+        secure: true,
+        maxAge:7*24*30*3600000,
+        domain:'social-yield-capital.vercel.app'
        
 
     }
