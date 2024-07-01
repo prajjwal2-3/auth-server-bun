@@ -86,9 +86,8 @@ export const signUp = async (req: any, res: any) => {
 
     return res
       .status(200)
-      .cookie(cookie.ACCESS_TOKEN, acessToken, cookie.OPTIONS)
-      .cookie(cookie.REFRESH_TOKEN, refreshToken, cookie.OPTIONS)
-      .json({ message: "User Registered Successfully" });
+      
+      .json({ message: "User Registered Successfully" ,access_token_from_s:acessToken,refresh_token_from_s:refreshToken});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
