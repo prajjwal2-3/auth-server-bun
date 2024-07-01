@@ -71,7 +71,8 @@ export const transporter = nodemailer.createTransport({
   </html>
   `,
   };
-
+  const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
+  const sevenMonthsInMilliseconds = 7 * oneMonthInMilliseconds;
   const isproduction = process.env.NODE_ENV==='production'
   export const cookie = {
     ACCESS_TOKEN: "access_token_from_s",
@@ -80,7 +81,7 @@ export const transporter = nodemailer.createTransport({
       httpOnly: true,
        sameSite: 'none',
         secure: true,
-        maxAge:7*24*30*3600000,
+        maxAge:sevenMonthsInMilliseconds,
         
        
 

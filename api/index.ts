@@ -11,7 +11,7 @@ const prisma = new PrismaClient();
 const app = express();
 var corsOptions = {
   
-  origin: ['https://easevent.vercel.app','http://localhost:3000','https://social-yield-capital.vercel.app'], 
+  origin: ['https://easevent.vercel.app','http://localhost:3000','https://social-yield-capital.vercel.app','https://socialyieldcapital.onrender.com/'], 
   credentials: true 
 };
 
