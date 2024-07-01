@@ -1,24 +1,24 @@
-import nodemailer from 'nodemailer'
+import nodemailer from "nodemailer";
 
 export const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.google.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: Bun.env.MAIL_HOST,
-      pass: Bun.env.MAIL_PASSWORD,
-    },
-  });
-  
- export const mailOptions = {
-    from: {
-      name: "Easevent",
-      address: Bun.env.MAIL_HOST,
-    },
-    to: "prajjwalbh25@gmail.com",
-    subject: "Welcome to Easevent!!!",
-    html: `
+  service: "gmail",
+  host: "smtp.google.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: Bun.env.MAIL_HOST,
+    pass: Bun.env.MAIL_PASSWORD,
+  },
+});
+
+export const mailOptions = {
+  from: {
+    name: "Easevent",
+    address: Bun.env.MAIL_HOST,
+  },
+  to: "prajjwalbh25@gmail.com",
+  subject: "Welcome to Easevent!!!",
+  html: `
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -70,41 +70,36 @@ export const transporter = nodemailer.createTransport({
   </body>
   </html>
   `,
-  };
-  const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
-  const sevenMonthsInMilliseconds = 7 * oneMonthInMilliseconds;
-  const isproduction = process.env.NODE_ENV==='production'
-  export const cookie = {
-    ACCESS_TOKEN: "access_token_from_s",
-    REFRESH_TOKEN: "refresh_token_from_s",
-    OPTIONS: {
-      httpOnly: true,
-       sameSite: 'none',
-        secure: true,
-        maxAge:sevenMonthsInMilliseconds,
-        domain:'.onrender.com',
-        
-       
+};
+const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
+const sevenMonthsInMilliseconds = 7 * oneMonthInMilliseconds;
+const isproduction = process.env.NODE_ENV === "production";
+export const cookie = {
+  ACCESS_TOKEN: "access_token_from_s",
+  REFRESH_TOKEN: "refresh_token_from_s",
+  OPTIONS: {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+    maxAge: sevenMonthsInMilliseconds,
+  },
+};
 
-    }
-}
-
-  export const jwt_secrets = {
-    email_verification: {
-        secret: Bun.env.TOKEN_SECRET || "",
-        expiry: Number(Bun.env.VERIFICATION_JWT_EXPIRES_IN_MINS || "")
-    },
-    forgot_pass: {
-        secret: Bun.env.FORGOT_PASSWORD_JWT_SECRET || "",
-        expiry: Number(Bun.env.FORGOT_PASSWORD_JWT_EXPIRES_IN_MINS || "")
-    },
-    access_token: {
-        secret: Bun.env.AUTH_ACCESS_JWT_SECRET || "",
-        expiry: Number(Bun.env.AUTH_ACCESS_JWT_EXPIRES_IN_MINS || "")
-    },
-    refresh_token: {
-        secret: Bun.env.AUTH_REFRESH_JWT_SECRET || "",
-        expiry: Number(Bun.env.AUTH_REFRESH_JWT_EXPIRES_IN_MINS || "")
-    },
-
-}
+export const jwt_secrets = {
+  email_verification: {
+    secret: Bun.env.TOKEN_SECRET || "",
+    expiry: Number(Bun.env.VERIFICATION_JWT_EXPIRES_IN_MINS || ""),
+  },
+  forgot_pass: {
+    secret: Bun.env.FORGOT_PASSWORD_JWT_SECRET || "",
+    expiry: Number(Bun.env.FORGOT_PASSWORD_JWT_EXPIRES_IN_MINS || ""),
+  },
+  access_token: {
+    secret: Bun.env.AUTH_ACCESS_JWT_SECRET || "",
+    expiry: Number(Bun.env.AUTH_ACCESS_JWT_EXPIRES_IN_MINS || ""),
+  },
+  refresh_token: {
+    secret: Bun.env.AUTH_REFRESH_JWT_SECRET || "",
+    expiry: Number(Bun.env.AUTH_REFRESH_JWT_EXPIRES_IN_MINS || ""),
+  },
+};

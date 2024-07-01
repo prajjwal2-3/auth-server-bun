@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
+
 const prisma = new PrismaClient();
 
 import { cookie, jwt_secrets } from "../config";
