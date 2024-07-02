@@ -195,6 +195,7 @@ export const generateSignInOTP = async (req: any, res: any) => {
 
   try {
     const OTP = Math.floor(100000 + Math.random() * 900000);
+    console.log(OTP)
     const user = await prisma.user.update({
       where: {
         email: email,
