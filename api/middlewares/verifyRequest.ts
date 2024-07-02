@@ -13,11 +13,11 @@ export const verifyRequest = async (req: any, res: any, next: any) => {
   try {
     
     console.log(req.cookies)
-    
+    console.log(req.body)
    
     
-    const acessToken = req.cookies.access_token_from_s;
-    const refreshToken = req.cookies.refresh_token_from_s;
+    const acessToken = req.body.access_token_from_s;
+    const refreshToken = req.body.refresh_token_from_s;
     console.log(acessToken)
     console.log(refreshToken)
     if (!acessToken || !refreshToken) {
