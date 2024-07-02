@@ -293,8 +293,7 @@ export const isAuthenticated = async (req:any,res:any) => {
 export const signOut = async (req: any, res: any) => {
   try {
     
-    res.clearCookie(cookie.ACCESS_TOKEN);
-    res.clearCookie(cookie.REFRESH_TOKEN);
+    
 
 
     const userId = req.userId
