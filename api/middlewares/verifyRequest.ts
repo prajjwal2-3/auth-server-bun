@@ -7,6 +7,7 @@ export const verifyRequest = async (req: any, res: any, next: any) => {
   interface DecodedJwtPayload {
    data:{
     email: string;
+    name:string
    }
   }
   try {
@@ -44,8 +45,10 @@ export const verifyRequest = async (req: any, res: any, next: any) => {
             jwt_secrets.refresh_token.secret
           )) as DecodedJwtPayload;
           const email = userInfo.data.email;
+          const name = userInfo.data.name
           const newAcessToken = generateJwtToken(
             email,
+            name,
             jwt_secrets.access_token.secret,
             jwt_secrets.access_token.expiry
           );

@@ -51,11 +51,13 @@ export const signUp = async (req: any, res: any) => {
   try {
     const acessToken = generateJwtToken(
       email,
+      name,
       jwt_secrets.access_token.secret,
       jwt_secrets.access_token.expiry
     );
     const refreshToken = generateJwtToken(
       email,
+      name,
       jwt_secrets.refresh_token.secret,
       jwt_secrets.refresh_token.expiry
     );
@@ -168,20 +170,21 @@ export const signInUsingPassword = async (req: any, res: any) => {
 
     const acessToken = generateJwtToken(
       email,
+      existingUser.name,
       jwt_secrets.access_token.secret,
       jwt_secrets.access_token.expiry
     );
     const refreshToken = generateJwtToken(
       email,
+      existingUser.name,
       jwt_secrets.refresh_token.secret,
       jwt_secrets.refresh_token.expiry
     );
 
     return res
       .status(200)
-      .cookie(cookie.ACCESS_TOKEN, acessToken, cookie.OPTIONS)
-      .cookie(cookie.REFRESH_TOKEN, refreshToken, cookie.OPTIONS)
-      .json({ message: "User Signed in successfully" });
+     
+      .json({ message: "User Signed in successfully" ,access_token_from_s:acessToken,refresh_token_from_s:refreshToken});
   } catch (error: any) {
     console.error(`Controller:Auth:Error in [Login a User] : ${error.message}`);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -240,20 +243,21 @@ export const signInUsingOTP = async (req: any, res: any) => {
 
     const acessToken = generateJwtToken(
       email,
+      existingUser.name,
       jwt_secrets.access_token.secret,
       jwt_secrets.access_token.expiry
     );
     const refreshToken = generateJwtToken(
       email,
+      existingUser.name,
       jwt_secrets.refresh_token.secret,
       jwt_secrets.refresh_token.expiry
     );
 
     return res
       .status(200)
-      .cookie(cookie.ACCESS_TOKEN, acessToken, cookie.OPTIONS)
-      .cookie(cookie.REFRESH_TOKEN, refreshToken, cookie.OPTIONS)
-      .json({ message: "User Signed in successfully" });
+      
+      .json({ message: "User Signed in successfully",access_token_from_s:acessToken,refresh_token_from_s:refreshToken });
   } catch (error) {
     console.error(`Controller:Auth:Error in [Login a User] : ${error}`);
     return res.status(500).json({ error: "Internal Server Error" });
