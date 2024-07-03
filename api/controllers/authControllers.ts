@@ -18,7 +18,7 @@ import {
 } from "../validations/validate";
 
 const sign_up_validation = z.object({
-  name: name_validator,
+  username: name_validator,
   email: email_validator,
   password: password_validator,
 });
@@ -40,7 +40,7 @@ const forgot_password_validation = z.object({
 export const signUp = async (req: any, res: any) => {
   const { name, email, password,phone ,username} = req.body;
   const testmail = "prajjwalbh25@gmail.com";
-  const validation = sign_up_validation.safeParse({ name, email, password });
+  const validation = sign_up_validation.safeParse({ username, email, password });
   if (!validation.success) {
     const errors = validation.error.errors.map((err) => err.message);
     return res.status(400).json({ errors });
