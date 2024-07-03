@@ -51,13 +51,13 @@ export const signUp = async (req: any, res: any) => {
   try {
     const acessToken = generateJwtToken(
       email,
-      name,
+      username,
       jwt_secrets.access_token.secret,
       jwt_secrets.access_token.expiry
     );
     const refreshToken = generateJwtToken(
       email,
-      name,
+      username,
       jwt_secrets.refresh_token.secret,
       jwt_secrets.refresh_token.expiry
     );
@@ -173,13 +173,13 @@ export const signInUsingPassword = async (req: any, res: any) => {
 
     const acessToken = generateJwtToken(
       email,
-      existingUser.name,
+      existingUser.username,
       jwt_secrets.access_token.secret,
       jwt_secrets.access_token.expiry
     );
     const refreshToken = generateJwtToken(
       email,
-      existingUser.name,
+      existingUser.username,
       jwt_secrets.refresh_token.secret,
       jwt_secrets.refresh_token.expiry
     );
@@ -247,13 +247,13 @@ export const signInUsingOTP = async (req: any, res: any) => {
 
     const acessToken = generateJwtToken(
       email,
-      existingUser.name,
+      existingUser.username,
       jwt_secrets.access_token.secret,
       jwt_secrets.access_token.expiry
     );
     const refreshToken = generateJwtToken(
       email,
-      existingUser.name,
+      existingUser.username,
       jwt_secrets.refresh_token.secret,
       jwt_secrets.refresh_token.expiry
     );

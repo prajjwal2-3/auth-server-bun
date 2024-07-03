@@ -45,7 +45,12 @@ export const verifyRequest = async (req: any, res: any, next: any) => {
             jwt_secrets.refresh_token.secret
           )) as DecodedJwtPayload;
           const email = userInfo.data.email;
-          const name = userInfo.data.name
+          const user = await prisma.user.findUnique({
+            where:{
+              email:userInfo.data.email
+            }
+          })
+          const name = user? user.username:''
           const newAcessToken = generateJwtToken(
             email,
             name,
