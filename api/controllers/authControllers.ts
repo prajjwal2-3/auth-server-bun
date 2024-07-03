@@ -38,7 +38,7 @@ const forgot_password_validation = z.object({
 });
 
 export const signUp = async (req: any, res: any) => {
-  const { name, email, password } = req.body;
+  const { name, email, password,phone ,username} = req.body;
   const testmail = "prajjwalbh25@gmail.com";
   const validation = sign_up_validation.safeParse({ name, email, password });
   if (!validation.success) {
@@ -63,6 +63,7 @@ export const signUp = async (req: any, res: any) => {
     );
     console.log(acessToken);
     console.log(refreshToken);
+    
     if (!acessToken)
       return res.status(500).json({
         message: "error generating access token, user registration failed.",
@@ -71,9 +72,11 @@ export const signUp = async (req: any, res: any) => {
     const newUser = await prisma.user.create({
       data: {
         email,
-        name,
+        name:`${username}${email}`,
         password: hashedPassword,
         verification_otp: verificationOTP,
+        phone,
+        username
       },
     });
     if (!newUser)
@@ -82,7 +85,7 @@ export const signUp = async (req: any, res: any) => {
     const log = await prisma.logs.create({
       data: {
         userId,
-        statement: `user ${newUser.name} was registered successfully`,
+        statement: `user with emailId ${newUser.email} was registered successfully`,
       },
     });
 
@@ -127,7 +130,7 @@ export const verifyRegistrationOtp = async (req: any, res: any) => {
       const log = await prisma.logs.create({
         data: {
           userId: verifiedUer.id,
-          statement: `user ${verifiedUer.name} verified successfully by OTP.`,
+          statement: `user with emailId ${verifiedUer.email} verified successfully by OTP.`,
         },
       });
       verifiedEmail(verifiedUer.name, verifiedUer.email);
@@ -164,7 +167,7 @@ export const signInUsingPassword = async (req: any, res: any) => {
     const log = await prisma.logs.create({
       data: {
         userId: existingUser.id,
-        statement: `user ${existingUser.name} was logged in successfully by password authentication`,
+        statement: `user with emailId ${existingUser.email} was logged in successfully by password authentication`,
       },
     });
 
@@ -238,7 +241,7 @@ export const signInUsingOTP = async (req: any, res: any) => {
     const log = await prisma.logs.create({
       data: {
         userId: existingUser.id,
-        statement: `user ${existingUser.name} was logged in successfully by OTP authentication`,
+        statement: `user with emailId ${existingUser.email} was logged in successfully by OTP authentication`,
       },
     });
 
